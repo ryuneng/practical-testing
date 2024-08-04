@@ -1,5 +1,6 @@
 package sample.cafekiosk.unit;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import sample.cafekiosk.unit.beverage.Americano;
 import sample.cafekiosk.unit.beverage.Latte;
@@ -22,6 +23,11 @@ class CafeKioskTest {
         System.out.println(">>> 담긴 음료 : " + cafeKiosk.getBeverages().get(0).getName());
     }
 
+    // DisplayName은 명사의 나열보다 섬세한 문장 형태로 작성하자.
+    // - 테스트 행위에 대한 결과까지 기술하기
+    // - 도메인 정책, 용어를 사용한 명확한 문장
+//    @DisplayName("음료 1개 추가 테스트")
+    @DisplayName("음료 1개를 추가하면 주문 목록에 담긴다.")
     @Test
     void add() {
         CafeKiosk cafeKiosk = new CafeKiosk();
@@ -81,8 +87,10 @@ class CafeKioskTest {
         assertThat(cafeKiosk.getBeverages()).isEmpty();
     }
 
+    @DisplayName("주문 목록에 담긴 상품들의 총 금액을 계산할 수 있다.")
     @Test
     void calculateTotalPrice() {
+        // given (어떤 환경에서)
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
         Latte latte = new Latte();
@@ -90,10 +98,23 @@ class CafeKioskTest {
         cafeKiosk.add(americano);
         cafeKiosk.add(latte);
 
+        // when (어떤 행동을 진행했을 때)
         int totalPrice = cafeKiosk.calculateTotalPrice();
 
+        // then (어떤 상태 변화가 일어난다)
         assertThat(totalPrice).isEqualTo(8500);
 
+    }
+
+    // LiveTemplates 추가하여 Given/When/Then 템플릿 사용하기
+    @DisplayName("")
+    @Test
+    void test() {
+        // given
+
+        // when
+
+        // then
     }
 
     // 1. CafeKiosk.java 에서 currentDateTime을 LocalDateTime.now();로 설정하는 경우에는
