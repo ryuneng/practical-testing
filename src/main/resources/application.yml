@@ -51,4 +51,4 @@ spring:
 
   sql:
     init:
-      mode: never
+      mode: never # sql 파일은 실행하지 않도록 설정 
