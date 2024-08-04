@@ -81,6 +81,21 @@ class CafeKioskTest {
         assertThat(cafeKiosk.getBeverages()).isEmpty();
     }
 
+    @Test
+    void calculateTotalPrice() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+        Latte latte = new Latte();
+
+        cafeKiosk.add(americano);
+        cafeKiosk.add(latte);
+
+        int totalPrice = cafeKiosk.calculateTotalPrice();
+
+        assertThat(totalPrice).isEqualTo(8500);
+
+    }
+
     // 1. CafeKiosk.java 에서 currentDateTime을 LocalDateTime.now();로 설정하는 경우에는
     // 실제 테스트를 실행하는 시간이 SHOP_OPEN_TIME 혹은 SHOP_CLOSE_TIME을 벗어난다면,
     // 테스트 결과가 무조건 실패로 나오기 때문에 해당 테스트는 적절한 테스트가 아님

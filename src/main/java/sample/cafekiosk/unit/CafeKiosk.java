@@ -40,11 +40,23 @@ public class CafeKiosk {
     }
 
     public int calculateTotalPrice() {
-        int totalPrice = 0;
-        for (Beverage beverage : beverages) {
-            totalPrice += beverage.getPrice();
-        }
-        return totalPrice;
+        // TDD(Test Driven Development)
+        // 1. RED: 실패하는 테스트 작성
+//        return 0;
+
+        // 2. GREEN: 테스트가 통과할 수 있는 최소한의 코딩
+//        return 8500;
+
+        // 3. REFACTOR: 테스트 통과를 유지하면서 구현 코드 개선
+//        int totalPrice = 0;
+//        for (Beverage beverage : beverages) {
+//            totalPrice += beverage.getPrice();
+//        }
+//        return totalPrice;
+
+        return beverages.stream()
+                .mapToInt(Beverage::getPrice)
+                .sum();
     }
 
     public Order createOrder(LocalDateTime currentDateTime) { // 2. 수정된 currentDateTime - 외부에서 파라미터로 받도록 설정하여 시간을 유연하게 지정할 수 있음
