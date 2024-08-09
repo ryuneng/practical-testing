@@ -3,10 +3,7 @@ package sample.cafekiosk.spring.api.service.mail;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import sample.cafekiosk.spring.client.mail.MailSendClient;
 import sample.cafekiosk.spring.domain.history.mail.MailSendHistory;
@@ -23,14 +20,14 @@ import static org.mockito.Mockito.*;
 class MailServiceTest {
 
     // 1-2. Mock 객체 생성 방법2 (가장 많이 사용)
-//    @Mock
-//    private MailSendClient mailSendClient;
+    @Mock
+    private MailSendClient mailSendClient;
 
     @Mock
     private MailSendHistoryRepository mailSendHistoryRepository;
 
-    @Spy
-    private MailSendClient mailSendClient;
+//    @Spy
+//    private MailSendClient mailSendClient;
 
     // MailService의 생성자를 확인해서 Mock 객체로 선언된 객체들을 Inject해준다. (DI와 같은 일을 수행)
     @InjectMocks
@@ -44,17 +41,22 @@ class MailServiceTest {
 //        MailSendClient mailSendClient = mock(MailSendClient.class);
 //        MailSendHistoryRepository mailSendHistoryRepository = mock(MailSendHistoryRepository.class);
 
-        MailService mailService = new MailService(mailSendClient, mailSendHistoryRepository);
+//        MailService mailService = new MailService(mailSendClient, mailSendHistoryRepository);
 
         // 2-1. Stubbing: Mock 객체의 행위를 정의 (mailSendClient.sendEmail()을 호출할 때, 어떤 String 값 4개가 들어오면 true를 return하도록 정의함)
-//        when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+//        Mockito.when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
 //                .thenReturn(true); // 기대하는 반환값 : true
+
+        // 2-1과 기능은 동일하지만, given 절에 when()이라는 메서드가 오는 것이 어색하기 때문에 BDD 스타일에 맞게 메서드 이름만 바꾼 것.
+        // Mockito 사용할 때는 BDDMockito를 사용하는 것이 더 자연스럽다.
+        BDDMockito.given(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+                .willReturn(true);
 
         // 2-2. Spy 문법 (Spy는 실제 객체를 사용하기 때문에, 주로 한 객체에서 일부는 실제 객체의 기능을 쓰고, 나머지 일부만 Stubbing하고 싶을 때 사용)
         // 보통 @Mock을 사용하는 경우가 더 많다.
-        doReturn(true)
-                .when(mailSendClient)
-                .sendEmail(anyString(), anyString(), anyString(), anyString());
+//        doReturn(true)
+//                .when(mailSendClient)
+//                .sendEmail(anyString(), anyString(), anyString(), anyString());
 
         // when
         boolean result = mailService.sendMail("", "", "", "");
