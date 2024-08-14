@@ -51,10 +51,18 @@ class OrderServiceTest {
     //      DataJpaTest는 @Transactional을 가지고 있어 자동으로 롤백이 되고, SpringBootTest는 @Transactional이 없어서 자동으로 롤백이 되지 않는다.
     @AfterEach
     void tearDown() {
+        // ++ OrderProduct가 Product와 Order를 참조하고 있기 때문에
+        //    OrderProduct의 순서가 둘보다 아래에 위치한다면, 외래키 제약조건 위반으로 인해 테스트는 실패한다.
         orderProductRepository.deleteAllInBatch();
         productRepository.deleteAllInBatch();
         orderRepository.deleteAllInBatch();
         stockRepository.deleteAllInBatch();
+
+        // ++ deleteAllInBatch()는 내부적으로 관계를 맺고 있는 객체(OrderProduct)를 직접 지워야 하지만, deleteAll()은 지우지 않아도 된다.
+        //    하지만 deleteAllInBatch()은 테이블 전체를 한번에 지워주는 반면, deleteAll()은 데이터를 건건이 지우기 때문에 실행되는 쿼리가 많아 성능 상 좋지 않다.
+//        orderProductRepository.deleteAll();
+//        productRepository.deleteAll();
+//        orderRepository.deleteAll();
     }
 
     @DisplayName("주문번호 리스트를 받아 주문을 생성한다.")
@@ -195,6 +203,11 @@ class OrderServiceTest {
 
         // 2. 재고를 생성한다.
 //        Stock stock1 = Stock.create("001", 1);
+        // ++ given 절은 최대한 독립성을 보장해서 구성하는 것이 좋다.
+        //   stock1.deductQuantity(1); 부분의 인자값을 3으로 바꾸면 테스트가 실패하게 된다.
+        //   stock1을 2개 만든 후, 3개를 감소시키기 때문에 given 절에서 실패하게 되는 것이다.
+        //   Stock.create()와 같은 팩토리 메서드는 프로덕션 코드에서 의도를 가지고 만든 메서드이기 때문이다.
+        //   따라서, 테스트 코드 작성 시 팩토리 메서드 패턴은 지양하고, 순수한 Builder/생성자를 통해 독립적으로 테스트 환경을 구성하는 것이 좋다.
         Stock stock1 = Stock.create("001", 2);
         Stock stock2 = Stock.create("002", 2);
         stock1.deductQuantity(1); // todo

@@ -1,8 +1,6 @@
 package sample.cafekiosk.spring.api.service.product;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -34,6 +32,17 @@ class ProductServiceTest {
     @AfterEach
     void tearDown() {
         productRepository.deleteAllInBatch();
+    }
+
+    // ++ BeforeAll/BeforeEach 는 공유자원과 동일하게 모든 테스트에 공통으로 영향을 주기 때문에 지양하는 것이 좋다.
+    @BeforeAll
+    static void beforeAll() {
+        // before class
+    }
+
+    @BeforeEach
+    void setUP() {
+        // before method
     }
 
     @DisplayName("신규 상품을 등록한다. 상품번호는 가장 최근 상품의 상품번호에서 1 증가한 값이다.")
