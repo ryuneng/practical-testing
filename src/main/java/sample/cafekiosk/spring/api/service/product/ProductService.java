@@ -25,11 +25,13 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductNumberFactory productNumberFactory;
 
     // 동시성 이슈
     @Transactional
     public ProductResponse createProduct(ProductCreateServiceRequest request) {
-        String nextProductNumber = createNextProductNumber();
+//        String nextProductNumber = createNextProductNumber();
+        String nextProductNumber = productNumberFactory.createNextProductNumber();
 
         Product product = request.toEntity(nextProductNumber);
         Product savedProduct = productRepository.save(product);
@@ -45,16 +47,18 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    private String createNextProductNumber() {
-        String latestProductNumber = productRepository.findLatestProductNumber();
-        if (latestProductNumber == null) {
-            return "001";
-        }
-
-        int latestProductNumberInt = Integer.parseInt(latestProductNumber);
-        int nextProductNumberInt = latestProductNumberInt + 1;
-
-        // 9 -> 009 / 10 -> 010
-        return String.format("%03d", nextProductNumberInt);
-    }
+    // ++ private 메서드를 테스트하고 싶다면, 객체를 분리할 시점인지 생각해보아야 한다.
+    //    ProductNumberFactory 클래스를 생성하여 분리해보도록 하자.
+//    private String createNextProductNumber() {
+//        String latestProductNumber = productRepository.findLatestProductNumber();
+//        if (latestProductNumber == null) {
+//            return "001";
+//        }
+//
+//        int latestProductNumberInt = Integer.parseInt(latestProductNumber);
+//        int nextProductNumberInt = latestProductNumberInt + 1;
+//
+//        // 9 -> 009 / 10 -> 010
+//        return String.format("%03d", nextProductNumberInt);
+//    }
 }
