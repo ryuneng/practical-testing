@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import sample.cafekiosk.spring.ControllerTestSupport;
 import sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
 import sample.cafekiosk.spring.api.service.product.ProductService;
 import sample.cafekiosk.spring.api.service.product.response.ProductResponse;
@@ -23,20 +24,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // Controller 관련 Bean만 올릴 수 있는 가벼운 테스트 어노테이션
-@WebMvcTest(controllers = ProductController.class)
-class ProductControllerTest {
+//@WebMvcTest(controllers = ProductController.class)
+class ProductControllerTest extends ControllerTestSupport {
 
     // MockMvc: 실제 서버를 기동하지 않고도 Mock(가짜) 객체를 사용해 스프링 MVC 동작을 재현할 수 있는 테스트 프레임워크
-    @Autowired
-    private MockMvc mockMvc;
-
-    // ObjectMapper: 직렬화/역직렬화를 도와주는 Jackson 라이브러리의 주요클래스
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    // @MockBean: 스프링 컨테이너에 Mockito로 만든 mock 객체를 주입하는 역할을 하는 어노테이션
-    @MockBean
-    private ProductService productService;
+//    @Autowired
+//    private MockMvc mockMvc;
+//
+//    // ObjectMapper: 직렬화/역직렬화를 도와주는 Jackson 라이브러리의 주요클래스
+//    @Autowired
+//    private ObjectMapper objectMapper;
+//
+//    // @MockBean: 스프링 컨테이너에 Mockito로 만든 mock 객체를 주입하는 역할을 하는 어노테이션
+//    @MockBean
+//    private ProductService productService;
 
     @DisplayName("신규 상품을 등록한다.")
     @Test
